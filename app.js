@@ -1,4 +1,3 @@
-var express = require('express');
 //Requiring dependancies
 
 var express = require('express');
@@ -56,12 +55,6 @@ var Insta_ID = sequelize.define('Insta_ID', {
 
 //Syncing model to database
 
-Insta_ID.sync({force: true}).then(function () {
-  return Insta_ID.create({
-    ClientID: "Hi"
-  });
-});
-
 
 //Server functions
 //Making button by running ejs
@@ -71,7 +64,16 @@ app.get('/', function (req, res){
 //
 
 app.post('/', function(req,res){
-	var uinput=req.body.uinput
+	var uinput=req.body.uinput;
+	
+//syncing model to database
+	var syncer = Insta_ID.sync().then(function () {
+  			return Insta_ID.create({
+    			//adding user input
+    			ClientID: uinput
+  			});
+	});
+
 });
 
 app.listen(8080, function(){
