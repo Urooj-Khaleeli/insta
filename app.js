@@ -4,7 +4,7 @@ var express = require('express');
 var app = express();
 var bodyParser=require('body-parser');
 var Sequelize=require('Sequelize');
-var pgp = require("pg-promise")
+var pgp = require("pg-promise");
 
 
 app.set('view engine', 'ejs');
@@ -53,17 +53,17 @@ var Insta_ID = sequelize.define('Insta_ID', {
   }
 });
 
-//Syncing model to database
-
 
 //Server functions
 //Making button by running ejs
 app.get('/', function (req, res){
 	res.render('button.ejs')
 });
-//
+//getting /table
+
 
 app.post('/', function(req,res){
+	
 	var uinput=req.body.uinput;
 	
 //syncing model to database
@@ -73,8 +73,18 @@ app.post('/', function(req,res){
     			ClientID: uinput
   			});
 	});
-
+	
+	var html = 'Click to return '+ '<a href="/">Try again.</a>'
+	+ 'Click to view table  ' + '<a href="/table">View table</a>';
+  		res.send(html);
 });
+
+app.get('/table', function(req,res){
+		Insta_ID.findAll().then(function(Insta_ID){
+			res.send(Insta_ID)
+		})
+});
+
 
 app.listen(8080, function(){
 	console.log("running on localhost:8080")
